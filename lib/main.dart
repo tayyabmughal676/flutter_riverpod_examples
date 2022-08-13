@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_example/providers/movie_provider.dart';
+import 'package:flutter_riverpod_example/screens/new_user_screen.dart';
 import 'package:flutter_riverpod_example/widgets/movie_card.dart';
 import 'models/movie.dart';
 
@@ -12,11 +13,30 @@ void main() {
   ));
 
   runApp(
-    const ProviderScope(
-      child: MovieApp(),
+    const ProviderScope(child: MyApp()
+      // MovieApp(),
     ),
   );
 }
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: Scaffold(
+        body: NewUserScreen(),
+      ),
+    );
+  }
+}
+
 
 class MovieApp extends ConsumerWidget {
   const MovieApp({Key? key}) : super(key: key);
@@ -25,8 +45,12 @@ class MovieApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = ThemeData();
 
-    List<Movie> formattedMovies = ref.watch(moviesProvider).movies;
-    bool isLoading = ref.watch(moviesProvider).isLoading;
+    List<Movie> formattedMovies = ref
+        .watch(moviesProvider)
+        .movies;
+    bool isLoading = ref
+        .watch(moviesProvider)
+        .isLoading;
 
     return MaterialApp(
       theme: theme.copyWith(
@@ -42,7 +66,7 @@ class MovieApp extends ConsumerWidget {
             children: [
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
                 child: TextField(
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -57,19 +81,19 @@ class MovieApp extends ConsumerWidget {
               isLoading
                   ? const CircularProgressIndicator()
                   : Expanded(
-                      child: Container(
-                        color: Colors.white,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: formattedMovies.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            Movie movie = formattedMovies[index];
+                child: Container(
+                  color: Colors.white,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: formattedMovies.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Movie movie = formattedMovies[index];
 
-                            return MovieCard(movie: movie);
-                          },
-                        ),
-                      ),
-                    )
+                      return MovieCard(movie: movie);
+                    },
+                  ),
+                ),
+              )
             ],
           ),
         ),
